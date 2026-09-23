@@ -1,4 +1,4 @@
-name: Build Rynx APK
+platformsuild Rynx APK
 
 on:
   workflow_dispatch:
@@ -28,7 +28,7 @@ jobs:
         uses: android-actions/setup-android@v3
 
       - name: Install Android SDK
-        run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
+        run: 
 
       - name: Build APK
         run: gradle assembleDebug
