@@ -1,9 +1,13 @@
-platformsuild Rynx APK
+name: Build Rynx APK
 
 on:
   workflow_dispatch:
   push:
-    branches: ["main"]
+    branches:
+      - main
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   build:
@@ -28,7 +32,9 @@ jobs:
         uses: android-actions/setup-android@v3
 
       - name: Install Android SDK
-        run: 
+        run: |
+          yes | sdkmanager --licenses || true
+          sdkmanager "platforms;android-35" "build-tools;35.0.0"
 
       - name: Build APK
         run: gradle assembleDebug
