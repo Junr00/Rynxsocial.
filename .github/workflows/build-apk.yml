@@ -8,6 +8,8 @@ on:
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  ANDROID_HOME: /usr/local/lib/android/sdk
+  ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
 
 jobs:
   build:
@@ -23,16 +25,27 @@ jobs:
           distribution: temurin
           java-version: "17"
 
+      - name: Check Android SDK
+        run: |
+          echo "$ANDROID_HOME"
+          ls "$ANDROID_HOME"
+          ls "$ANDROID_HOME/cmdline-tools"
+          "$ANDROID_HOME/cmdline-tools/16.0/bin/sdkmanager" --version
+
+      - name: Accept Android SDK licenses
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/16.0/bin/sdkmanager" --licenses || true
+
+      - name: Install Android SDK packages
+        run: |
+          "$ANDROID_HOME/cmdline-tools/16.0/bin/sdkmanager" \
+            "platforms;android-35" \
+            "build-tools;35.0.0"
+
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: "8.9"
-
-      - name: Accept Android SDK licenses
-        run: yes | sdkmanager --licenses || true
-
-      - name: Install Android SDK packages
-        run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
 
       - name: Build APK
         run: gradle assembleDebug
