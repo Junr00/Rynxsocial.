@@ -1,0 +1,3 @@
+<resources>
+    <style name="Theme.RynxSocial" parent="android:style/Theme.Material.Light.NoActionBar" />
+</resources>
